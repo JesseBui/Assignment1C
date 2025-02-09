@@ -6,24 +6,41 @@
 
 struct province
 {
-    char provinceName[20];
+    char provinceName[30];
     unsigned int numberOfTestCenters;
     unsigned int totalNumberOfInfections;
     struct province *nextPtr;
+};
+
+char provinces[13][30] = {
+	"Alberta",
+    "British Columbia",
+    "Manitoba",
+    "New Brunswick",
+    "Newfoundland and Labrador",
+    "Northwest Territories",
+    "Nova Scotia",
+    "Nunavut",
+    "Ontario",
+    "Prince Edward Island",
+    "Quebec",
+    "Saskatchewan",
+    "Yukon"
 };
 
 typedef struct province Province;
 typedef struct province *ProvincePtr;
 
 // misc functions
-ProvincePtr createProvince(char provinceName[20], int numberOfTestCenters);
-void printProvince(ProvincePtr listPtr, char provinceName[20]);
+ProvincePtr createProvince(char provinceName[30], int numberOfTestCenters);
+void printProvince(ProvincePtr listPtr, char provinceName[30]);
 void printList(ProvincePtr listPtr);
 void printMenu();
-void removeNewline(char word[20]);
+bool inProvArray(char provinceName[30]);
+void removeNewline(char word[30]);
 
 // homework functions
-ProvincePtr insertAndComputeTotalNumberOfInfections(ProvincePtr listPtr, char provinceName[20], int numberOfTestCenters);
+ProvincePtr insertAndComputeTotalNumberOfInfections(ProvincePtr listPtr, char provinceName[30], int numberOfTestCenters);
 void deleteAndDetermineLeastInfectedProvince(ProvincePtr listPtr);
 
 // MAIN
@@ -32,13 +49,13 @@ int main()
     ProvincePtr head;
     head = NULL;
 
-    char choice[20];
-    char input[20];
-    char provinceName[20];
+    char choice[30];
+    char input[30];
+    char provinceName[30];
     int numberOfTestCenters;
   	int totalNumberOfInfections;
     printMenu();
-    fgets(choice, 20, stdin);
+    fgets(choice, 30, stdin);
     removeNewline(choice);
     while (strcasecmp(choice, "5") != 0)
     {
@@ -46,15 +63,22 @@ int main()
         {
             case 1:
                 printf("Enter province name: ");
-                fgets(provinceName, 20, stdin);
+                fgets(provinceName, 30, stdin);
                 removeNewline(provinceName);
+                while (inProvArray(provinceName) != true)
+                {
+                    puts("Invalid province name.");
+                    printf("Enter province name: ");
+                    fgets(provinceName, 30, stdin);
+                    removeNewline(provinceName);
+                }
                 printf("Enter number of test centers: ");
-                fgets(input, 20, stdin);
+                fgets(input, 30, stdin);
                 while (strtol(input, NULL, 10) < 1 || strtol(input, NULL, 10) > 10)
                 {
                     puts("Invalid number of test centers (1 - 10).");
                     printf("Enter number of test centers: ");
-                    fgets(input, 20, stdin);
+                    fgets(input, 25, stdin);
                 }
                 head = insertAndComputeTotalNumberOfInfections(head, provinceName, strtol(input, NULL, 10));
                 printList(head);
@@ -64,7 +88,7 @@ int main()
                 break;
             case 3:
                 printf("Enter province name: ");
-                fgets(provinceName, 20, stdin);
+                fgets(provinceName, 30, stdin);
                 removeNewline(provinceName);
                 printProvince(head, provinceName);
                 break;
@@ -78,13 +102,13 @@ int main()
                  break;
         }
         printMenu();
-        fgets(choice, 20, stdin);
+        fgets(choice, 25, stdin);
         removeNewline(choice);
     }
 }
 
 // DONE - constructor
-ProvincePtr createProvince(char provinceName[20], int numberOfTestCenters)
+ProvincePtr createProvince(char provinceName[30], int numberOfTestCenters)
 {
     ProvincePtr newProvince;
     newProvince = (ProvincePtr)malloc(sizeof(Province));
@@ -99,7 +123,7 @@ ProvincePtr createProvince(char provinceName[20], int numberOfTestCenters)
 }
 
 // DONE - prints province data
-void printProvince(ProvincePtr listPtr, char provinceName[20])
+void printProvince(ProvincePtr listPtr, char provinceName[30])
 {
     int position = 0;
     if (listPtr == NULL)
@@ -155,8 +179,21 @@ void printMenu()
     printf("Enter your choice: ");
 }
 
+bool inProvArray(char provinceName[30])
+{
+    int i;
+    for (i = 0; i < 13; i++)
+    {
+        if (strcmp(provinceName, provinces[i]) == 0)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 // DONE
-void removeNewline(char word[20])
+void removeNewline(char word[30])
 {
 	    int i = 0;
     while (word[i] != '\0')
@@ -170,19 +207,19 @@ void removeNewline(char word[20])
 }
 
 // DONE - insert province into linked list, then calculates total no of infections
-ProvincePtr insertAndComputeTotalNumberOfInfections(ProvincePtr listPtr, char provinceName[20], int numberOfTestCenters)
+ProvincePtr insertAndComputeTotalNumberOfInfections(ProvincePtr listPtr, char provinceName[30], int numberOfTestCenters)
 {
     ProvincePtr prev = NULL;
     ProvincePtr curr = listPtr;
 
     // use for loop to get total
     int i;
-    char cases[20];
+    char cases[30];
     int total = 0;
     for (i = 0; i < numberOfTestCenters; i++)
     {
         printf("Enter number of cases in test center #%d: ", i + 1);
-        fgets(cases, 20, stdin);
+        fgets(cases, 30, stdin);
         total += strtol(cases, NULL, 10);
     }
 
