@@ -3,9 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-
-
-struct province {
+struct province
+{
     char provinceName[20];
     unsigned int numberOfTestCenters;
     unsigned int totalNumberOfInfections;
@@ -13,8 +12,7 @@ struct province {
 };
 
 typedef struct province Province;
-typedef struct province * ProvincePtr;
-
+typedef struct province *ProvincePtr;
 
 // misc functions
 ProvincePtr createProvince(char provinceName[20], int numberOfTestCenters);
@@ -25,11 +23,10 @@ void printMenu();
 
 // homework functions
 ProvincePtr insertAndComputeTotalNumberOfInfections(ProvincePtr listPtr, char provinceName[20], int numberOfTestCenters);
-void deleteAndDetermineLeastInfectedProvince (ProvincePtr listPtr, int numberOfTestCenters);
+void deleteAndDetermineLeastInfectedProvince(ProvincePtr listPtr);
 
-int main() 
+int main()
 {
-    
 }
 // CHECK - constructor
 ProvincePtr createProvince(char provinceName[20], int numberOfTestCenters)
@@ -115,12 +112,12 @@ ProvincePtr insertAndComputeTotalNumberOfInfections(ProvincePtr listPtr, char pr
 {
     ProvincePtr prev = NULL;
     ProvincePtr curr = listPtr;
-    
+
     // use for loop to get total
     int i;
     int cases = 0;
     int total = 0;
-    // 
+    //
     for (i = 0; i < numberOfTestCenters; i++)
     {
         printf("Enter number of cases in test center # %d", i + 1);
@@ -143,9 +140,9 @@ ProvincePtr insertAndComputeTotalNumberOfInfections(ProvincePtr listPtr, char pr
         // TODO insert newProv into linked list
         curr->nextPtr = newProv;
     }
-    
+
     // if found, assign total to curr->totalNumberOfInfections
-    // 
+    //
     else
     {
         curr->totalNumberOfInfections = total;
@@ -154,24 +151,33 @@ ProvincePtr insertAndComputeTotalNumberOfInfections(ProvincePtr listPtr, char pr
 }
 
 // TODO
-void deleteAndDetermineLeastInfectedProvince (ProvincePtr listPtr, int numberOfTestCenters)
+void deleteAndDetermineLeastInfectedProvince(ProvincePtr listPtr)
 {
-    ProvincePtr previousPtr, currentPtr, tempPtr;
-    previousPtr = NULL;
+    ProvincePtr minPtr, currentPtr, tempPtr;
+    minPtr = NULL;
     currentPtr = listPtr;
     tempPtr = NULL;
-
-    if (listPtr == NULL)
+    
+    while (currentPtr != NULL)
     {
-        puts("List is empty\n");
-        return listPtr;
-    }
-
-    while (currentPtr != NULL && currentPtr->numberOfTestCenters)
-    {
-        previousPtr = currentPtr;
+        // find the least infected province
+        if (currentPtr->totalNumberOfInfections < minPtr->totalNumberOfInfections)
+        {
+            minPtr = currentPtr;
+        }
         currentPtr = currentPtr->nextPtr;
     }
     
+    printf("Province with Least Infection : %d with the total of: %d", minPtr->provinceName, minPtr->totalNumberOfInfections);
+    
+    //nuke the whole list
+    while (currentPtr != NULL)
+    {
+        tempPtr = currentPtr;
+        currentPtr = currentPtr->nextPtr;
+        free(tempPtr);
+    }
+
+    listPtr = NULL;
     
 }
