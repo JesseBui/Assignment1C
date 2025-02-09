@@ -298,10 +298,10 @@ void deleteAndDetermineLeastInfectedProvince(ProvincePtr listPtr)
         tempPtr = listPtr;
         listPtr = listPtr->nextPtr;
 
-        free(tempPtr);
         tempPtr->numberOfTestCenters= 0;
-        tempPtr->provinceName[0]= "\0";
+        tempPtr->provinceName[0]= '\0';
         tempPtr->totalNumberOfInfections = 0;
+        free(tempPtr);
     }
     listPtr = NULL;
 }
