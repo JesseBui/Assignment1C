@@ -1,4 +1,6 @@
+#include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 
@@ -15,19 +17,21 @@ typedef struct province * ProvincePtr;
 
 
 // misc functions
-ProvincePtr createProvince(char provinceName[20], int numberOfTestCenters, int totalNumberOfInfections);
-void printProvince(ProvincePtr head, char provinceName[20]);
-void printList(ProvincePtr head);
+ProvincePtr createProvince(char provinceName[20], int numberOfTestCenters);
+bool isProvinceInList(ProvincePtr listPtr, char provinceName[20]);
+void printProvince(ProvincePtr listPtr, char provinceName[20]);
+void printList(ProvincePtr listPtr);
+void printMenu();
 
 // homework functions
-ProvincePtr insertAndComputeTotalNumberOfInfections(ProvincePtr listPtr, char provinceName[20] int numberOfTestCenters);
+ProvincePtr insertAndComputeTotalNumberOfInfections(ProvincePtr listPtr, char provinceName[20], int numberOfTestCenters);
 void deleteAndDetermineLeastInfectedProvince (ProvincePtr listPtr);
 
 int main() 
 {
     
 }
-// DONE - constructor
+// CHECK - constructor
 ProvincePtr createProvince(char provinceName[20], int numberOfTestCenters)
 {
     ProvincePtr newProvince;
@@ -42,54 +46,73 @@ ProvincePtr createProvince(char provinceName[20], int numberOfTestCenters)
     return newProvince;
 }
 
-// DONE - prints province data
-void printProvince(ProvincePtr head, char provinceName[20])
+// CHECK - check if province is in list
+bool isProvinceInList(ProvincePtr listPtr, char provinceName[20])
+{
+    while (listPtr != NULL)
+    {
+        if (strcmp(listPtr->provinceName, provinceName) == 0)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+// CHECK - prints province data
+void printProvince(ProvincePtr listPtr, char provinceName[20])
 {
     int position = 0;
-    if (head == NULL)
+    if (listPtr == NULL)
     {
         printf("List is empty\n.");
     }
     else
     {
-        while (head != NULL)
+        while (listPtr != NULL)
         {
-            if (strcmp(head->provinceName, provinceName) == 0)
+            if (strcmp(listPtr->provinceName, provinceName) == 0)
             {
-                printf("Province: %s\n", head->provinceName);
+                printf("Province: %s\n", listPtr->provinceName);
                 printf("Found at position %d\n", position);
-                printf("No. of Testing Centers: %u\n", head->numberOfTestCenters);
-                printf("No. of Infections: %u\n", head->totalNumberOfInfections);
+                printf("No. of Testing Centers: %u\n", listPtr->numberOfTestCenters);
+                printf("No. of Infections: %u\n", listPtr->totalNumberOfInfections);
                 return;
             }
-            head = head->nextPtr;
+            listPtr = listPtr->nextPtr;
             position++;
         }
         printf("Province not found.\n");
     }
 }
 
-// DONE - prints entire list
-void printList(ProvincePtr head)
+// CHECK - prints entire list
+void printList(ProvincePtr listPtr)
 {
-    if (head == NULL)
+    if (listPtr == NULL)
     {
-        puts("List is empty.\n")
+        puts("List is empty.\n");
     }
     else
     {
-        while (head != NULL)
+        while (listPtr != NULL)
         {
-            printf("Province: %s\n", head->provinceName);
-            printf("No. of Testing Centers: %u\n", head->numberOfTestCenters);
-            printf("No. of Infections: %u\n\n", head->totalNumberOfInfections);
-            head = head->nextPtr;
+            printf("Province: %s\n", listPtr->provinceName);
+            printf("No. of Testing Centers: %u\n", listPtr->numberOfTestCenters);
+            printf("No. of Infections: %u\n\n", listPtr->totalNumberOfInfections);
+            listPtr = listPtr->nextPtr;
         }
     }
 }
 
+// TODO prints menu
+void printMenu()
+{
+
+}
+
 // TODO insert province into linked list, then calculates total no of infections
-ProvincePtr insertAndComputeTotalNumberOfInfections(ProvincePtr listPtr, char provinceName[20] int numberOfTestCenters)
+ProvincePtr insertAndComputeTotalNumberOfInfections(ProvincePtr listPtr, char provinceName[20], int numberOfTestCenters)
 {
     ProvincePtr prev = NULL;
     ProvincePtr curr = listPtr;
@@ -102,23 +125,32 @@ ProvincePtr insertAndComputeTotalNumberOfInfections(ProvincePtr listPtr, char pr
     for (i = 0; i < numberOfTestCenters; i++)
     {
         printf("Enter number of cases in test center # %d", i + 1);
-        // TODO REPLACE WITH FGETS()
+        // TODO replace with fgets()/string to int
         scanf("%d", &cases);
         total += cases;
     }
     // traverse list and look for province
-    while (current != NULL && strcmp(current->provinceName, provinceName) != 0)
+    while (curr != NULL && strcmp(curr->provinceName, provinceName) != 0)
     {
         prev = curr;
         curr = curr->nextPtr;
     }
-    // if found, assign total to curr->totalNumberOfInfections
+    // if not found, make new province and assign ssign total to newProv->totalNumberOfInfections
+    if (curr == NULL)
+    {
+        ProvincePtr newProv = createProvince(provinceName, numberOfTestCenters);
+        newProv->totalNumberOfInfections = total;
+
+        // TODO insert newProv into linked list
+        curr->nextPtr = newProv;
+    }
     
-    // if not, make new province and assign ssign total to newProv->totalNumberOfInfections
-    // ProvincePtr newProv = createProvince(provinceName, numberOfTestCenters);
-
-
-
+    // if found, assign total to curr->totalNumberOfInfections
+    // 
+    else
+    {
+        curr->totalNumberOfInfections = total;
+    }
     return listPtr;
 }
 
