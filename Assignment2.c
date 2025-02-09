@@ -3,8 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
-
 struct province {
     char provinceName[20];
     unsigned int numberOfTestCenters;
@@ -14,7 +12,6 @@ struct province {
 
 typedef struct province Province;
 typedef struct province * ProvincePtr;
-
 
 // misc functions
 ProvincePtr createProvince(char provinceName[20], int numberOfTestCenters);
@@ -27,10 +24,34 @@ void printMenu();
 ProvincePtr insertAndComputeTotalNumberOfInfections(ProvincePtr listPtr, char provinceName[20], int numberOfTestCenters);
 void deleteAndDetermineLeastInfectedProvince (ProvincePtr listPtr);
 
+// MAIN
 int main() 
 {
-    
+    ProvincePtr head;
+    head = NULL;
+
+    char choice;
+    char input[20];
+    char provinceName[20];
+    int numberOfTestCenters;
+  	int totalNumberOfInfections;
+    while (strcomp(choice, '5') != 0)
+    {
+        switch (choice)
+        {
+            case '1':
+                printf("Enter province name: ");
+                fgets(provinceName, 20, stdin);
+                printf("Enter number of test centers: ");
+                fgets(input, 20, stdin);
+                head = insertAndComputeTotalNumberOfInfections()
+                printList(head);
+                break;
+            case '2'
+        }
+    }
 }
+
 // CHECK - constructor
 ProvincePtr createProvince(char provinceName[20], int numberOfTestCenters)
 {
@@ -55,6 +76,7 @@ bool isProvinceInList(ProvincePtr listPtr, char provinceName[20])
         {
             return true;
         }
+        listPtr = listPtr->nextPtr;
     }
     return false;
 }
@@ -105,13 +127,18 @@ void printList(ProvincePtr listPtr)
     }
 }
 
-// TODO prints menu
+// DONE - prints menu
 void printMenu()
 {
-
+    printf("1. Insert Province and Compute Total Number of Infections\n");
+    printf("2. Delete and Determine Least Infected Province\n");
+    printf("3. Print Province\n");
+    printf("4. Print List\n");
+    printf("5. Exit\n");
+    printf("Enter your choice: ");
 }
 
-// TODO insert province into linked list, then calculates total no of infections
+// CHECK - insert province into linked list, then calculates total no of infections
 ProvincePtr insertAndComputeTotalNumberOfInfections(ProvincePtr listPtr, char provinceName[20], int numberOfTestCenters)
 {
     ProvincePtr prev = NULL;
@@ -119,34 +146,46 @@ ProvincePtr insertAndComputeTotalNumberOfInfections(ProvincePtr listPtr, char pr
     
     // use for loop to get total
     int i;
-    int cases = 0;
+    char cases[20];
     int total = 0;
-    // 
     for (i = 0; i < numberOfTestCenters; i++)
     {
         printf("Enter number of cases in test center # %d", i + 1);
-        // TODO replace with fgets()/string to int
-        scanf("%d", &cases);
-        total += cases;
+        // replace with fgets()/string to int
+        fgets(cases, 20, stdin);
+        total += strtol(cases, NULL, 10);
     }
+
     // traverse list and look for province
-    while (curr != NULL && strcmp(curr->provinceName, provinceName) != 0)
+    // strcmp() returns:
+    // -1 when first arg appears earlier in the alphabet 
+    // 1 when first arg appears later,
+    // 0 when first arg is equal to the second arg
+    // 
+    while (curr != NULL && strcmp(curr->provinceName, provinceName) < 0)
     {
         prev = curr;
         curr = curr->nextPtr;
     }
+
     // if not found, make new province and assign ssign total to newProv->totalNumberOfInfections
     if (curr == NULL)
     {
         ProvincePtr newProv = createProvince(provinceName, numberOfTestCenters);
         newProv->totalNumberOfInfections = total;
-
-        // TODO insert newProv into linked list
-        curr->nextPtr = newProv;
+        // insert newProv into linked list
+        // if list is empty, assign newProv to be the head of the linked list
+        if (prev == NULL) {
+            listPtr = newProv;
+        }
+        else // if not empty
+        {
+            prev->nextPtr = newProv;
+            newProv->nextPtr = curr;
+        }
     }
     
     // if found, assign total to curr->totalNumberOfInfections
-    // 
     else
     {
         curr->totalNumberOfInfections = total;
