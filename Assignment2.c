@@ -269,12 +269,18 @@ ProvincePtr insertAndComputeTotalNumberOfInfections(ProvincePtr listPtr, char pr
 }
 
 // DONE
+// DONE
 void deleteAndDetermineLeastInfectedProvince(ProvincePtr listPtr)
 {
     ProvincePtr minPtr, currentPtr, tempPtr;
     minPtr = currentPtr = listPtr; 
     tempPtr = NULL;
     
+    if (listPtr == NULL)
+    {
+        puts("The list is empty");
+        return;
+    }
     while (currentPtr != NULL)
     {
         // find the least infected province
@@ -285,13 +291,17 @@ void deleteAndDetermineLeastInfectedProvince(ProvincePtr listPtr)
         currentPtr = currentPtr->nextPtr;
     }
     printf("Province with least cases: %s\nTotal cases: %d\n", minPtr->provinceName, minPtr->totalNumberOfInfections);
-    free(minPtr);
+    currentPtr = listPtr;
     //nuke the whole list
     while (listPtr != NULL)
     {
         tempPtr = listPtr;
         listPtr = listPtr->nextPtr;
+
         free(tempPtr);
+        tempPtr->numberOfTestCenters= 0;
+        tempPtr->provinceName[0]= "\0";
+        tempPtr->totalNumberOfInfections = 0;
     }
     listPtr = NULL;
 }
