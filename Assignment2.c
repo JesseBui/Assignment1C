@@ -3,7 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-struct province {
+struct province
+{
     char provinceName[20];
     unsigned int numberOfTestCenters;
     unsigned int totalNumberOfInfections;
@@ -11,7 +12,7 @@ struct province {
 };
 
 typedef struct province Province;
-typedef struct province * ProvincePtr;
+typedef struct province *ProvincePtr;
 
 // misc functions
 ProvincePtr createProvince(char provinceName[20], int numberOfTestCenters);
@@ -22,7 +23,7 @@ void printMenu();
 
 // homework functions
 ProvincePtr insertAndComputeTotalNumberOfInfections(ProvincePtr listPtr, char provinceName[20], int numberOfTestCenters);
-void deleteAndDetermineLeastInfectedProvince (ProvincePtr listPtr);
+void deleteAndDetermineLeastInfectedProvince(ProvincePtr listPtr);
 
 // MAIN
 int main() 
@@ -143,7 +144,7 @@ ProvincePtr insertAndComputeTotalNumberOfInfections(ProvincePtr listPtr, char pr
 {
     ProvincePtr prev = NULL;
     ProvincePtr curr = listPtr;
-    
+
     // use for loop to get total
     int i;
     char cases[20];
@@ -184,7 +185,7 @@ ProvincePtr insertAndComputeTotalNumberOfInfections(ProvincePtr listPtr, char pr
             newProv->nextPtr = curr;
         }
     }
-    
+
     // if found, assign total to curr->totalNumberOfInfections
     else
     {
@@ -194,8 +195,33 @@ ProvincePtr insertAndComputeTotalNumberOfInfections(ProvincePtr listPtr, char pr
 }
 
 // TODO
-void deleteAndDetermineLeastInfectedProvince (ProvincePtr listPtr)
+void deleteAndDetermineLeastInfectedProvince(ProvincePtr listPtr)
 {
-    // deletes each province from the linked-list and attaches to a new ProvincePtr
-    // call printProvince maybe?
+    ProvincePtr minPtr, currentPtr, tempPtr;
+    minPtr = NULL;
+    currentPtr = listPtr;
+    tempPtr = NULL;
+    
+    while (currentPtr != NULL)
+    {
+        // find the least infected province
+        if (currentPtr->totalNumberOfInfections < minPtr->totalNumberOfInfections)
+        {
+            minPtr = currentPtr;
+        }
+        currentPtr = currentPtr->nextPtr;
+    }
+    
+    printf("Province with Least Infection : %d with the total of: %d", minPtr->provinceName, minPtr->totalNumberOfInfections);
+    
+    //nuke the whole list
+    while (currentPtr != NULL)
+    {
+        tempPtr = currentPtr;
+        currentPtr = currentPtr->nextPtr;
+        free(tempPtr);
+    }
+
+    listPtr = NULL;
+    
 }
