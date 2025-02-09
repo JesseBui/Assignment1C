@@ -36,7 +36,9 @@ int main()
     char provinceName[20];
     int numberOfTestCenters;
   	int totalNumberOfInfections;
-    while (strcomp(choice, '5') != 0)
+    printMenu();
+    fgets(choice, 20, stdin);
+    while (strcmp(choice, '5') != 0)
     {
         switch (choice)
         {
@@ -45,10 +47,25 @@ int main()
                 fgets(provinceName, 20, stdin);
                 printf("Enter number of test centers: ");
                 fgets(input, 20, stdin);
-                head = insertAndComputeTotalNumberOfInfections()
+                head = insertAndComputeTotalNumberOfInfections(head, provinceName, strtol(input, NULL, 10));
                 printList(head);
                 break;
-            case '2'
+            case '2':
+                deleteAndDetermineLeastInfectedProvince(head);
+                break;
+            case '3':
+                printf("Enter province name: ");
+                fgets(provinceName, 20, stdin);
+                printProvince(head, provinceName);
+                break;
+             case '4':
+                 printList(head);
+                 break;
+             case '5':
+                 break;
+             default:
+                 puts("Invalid choice.");
+                 break;
         }
     }
 }
@@ -198,8 +215,7 @@ ProvincePtr insertAndComputeTotalNumberOfInfections(ProvincePtr listPtr, char pr
 void deleteAndDetermineLeastInfectedProvince(ProvincePtr listPtr)
 {
     ProvincePtr minPtr, currentPtr, tempPtr;
-    minPtr = NULL;
-    currentPtr = listPtr;
+    minPtr = currentPtr = listPtr; // minPtr was NULL, we'll get a segfault in line 207
     tempPtr = NULL;
     
     while (currentPtr != NULL)
@@ -212,16 +228,14 @@ void deleteAndDetermineLeastInfectedProvince(ProvincePtr listPtr)
         currentPtr = currentPtr->nextPtr;
     }
     
-    printf("Province with Least Infection : %d with the total of: %d", minPtr->provinceName, minPtr->totalNumberOfInfections);
+    printf("Province with least cases : %s\nTotal cases: %d\n", minPtr->provinceName, minPtr->totalNumberOfInfections);
     
     //nuke the whole list
-    while (currentPtr != NULL)
+    while (listPtr != NULL)
     {
-        tempPtr = currentPtr;
-        currentPtr = currentPtr->nextPtr;
+        tempPtr = listPtr;
+        listPtr = listPtr->nextPtr;
         free(tempPtr);
     }
-
     listPtr = NULL;
-    
 }
