@@ -25,7 +25,7 @@ void printMenu();
 
 // homework functions
 ProvincePtr insertAndComputeTotalNumberOfInfections(ProvincePtr listPtr, char provinceName[20], int numberOfTestCenters);
-void deleteAndDetermineLeastInfectedProvince (ProvincePtr listPtr);
+void deleteAndDetermineLeastInfectedProvince (ProvincePtr listPtr, int numberOfTestCenters);
 
 int main() 
 {
@@ -108,7 +108,6 @@ void printList(ProvincePtr listPtr)
 // TODO prints menu
 void printMenu()
 {
-
 }
 
 // TODO insert province into linked list, then calculates total no of infections
@@ -155,8 +154,24 @@ ProvincePtr insertAndComputeTotalNumberOfInfections(ProvincePtr listPtr, char pr
 }
 
 // TODO
-void deleteAndDetermineLeastInfectedProvince (ProvincePtr listPtr)
+void deleteAndDetermineLeastInfectedProvince (ProvincePtr listPtr, int numberOfTestCenters)
 {
-    // deletes each province from the linked-list and attaches to a new ProvincePtr
-    // call printProvince maybe?
+    ProvincePtr previousPtr, currentPtr, tempPtr;
+    previousPtr = NULL;
+    currentPtr = listPtr;
+    tempPtr = NULL;
+
+    if (listPtr == NULL)
+    {
+        puts("List is empty\n");
+        return listPtr;
+    }
+
+    while (currentPtr != NULL && currentPtr->numberOfTestCenters)
+    {
+        previousPtr = currentPtr;
+        currentPtr = currentPtr->nextPtr;
+    }
+    
+    
 }
