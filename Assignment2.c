@@ -78,7 +78,7 @@ int main()
                 {
                     puts("Invalid number of test centers (1 - 10).");
                     printf("Enter number of test centers: ");
-                    fgets(input, 25, stdin);
+                    fgets(input, 30, stdin);
                 }
                 head = insertAndComputeTotalNumberOfInfections(head, provinceName, strtol(input, NULL, 10));
                 printList(head);
@@ -228,6 +228,12 @@ ProvincePtr insertAndComputeTotalNumberOfInfections(ProvincePtr listPtr, char pr
     {
         printf("Enter number of cases in test center #%d: ", i + 1);
         fgets(cases, 30, stdin);
+        while (strtol(cases, NULL, 10) < 0)
+        {
+            puts("Invalid number of test centers (1 - 10).");
+            printf("Enter number of cases in test center #%d: ", i + 1);
+            fgets(cases, 30, stdin);
+        }
         total += strtol(cases, NULL, 10);
     }
 
