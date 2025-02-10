@@ -91,6 +91,13 @@ int main()
                 printf("Enter province name: ");
                 fgets(provinceName, 30, stdin);
                 removeNewline(provinceName);
+                while (inProvArray(provinceName) != true)
+                {
+                    puts("Invalid province name.");
+                    printf("Enter province name: ");
+                    fgets(provinceName, 30, stdin);
+                    removeNewline(provinceName);
+                }
                 printProvince(head, provinceName);
                 break;
              case 4:
@@ -172,8 +179,8 @@ void printList(ProvincePtr listPtr)
 // DONE - prints menu
 void printMenu()
 {
-    printf("1. Insert Province and Compute Total Number of Infections\n");
-    printf("2. Delete and Determine Least Infected Province\n");
+    printf("1. Insert province (HW - 1)\n");
+    printf("2. Delete entire list, print province w/ least cases (HW - 2)\n");
     printf("3. Print Province\n");
     printf("4. Print List\n");
     printf("5. Exit\n");
@@ -270,9 +277,14 @@ ProvincePtr insertAndComputeTotalNumberOfInfections(ProvincePtr listPtr, char pr
 }
 
 // DONE
-// DONE
 void deleteAndDetermineLeastInfectedProvince(ProvincePtr listPtr)
 {
+    if (listPtr == NULL)
+    {
+        puts("List is empty.");
+        return;
+    }
+    
     ProvincePtr minPtr, currentPtr, tempPtr;
     minPtr = currentPtr = listPtr; 
     tempPtr = NULL;
