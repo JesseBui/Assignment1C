@@ -91,13 +91,6 @@ int main()
                 printf("Enter province name: ");
                 fgets(provinceName, 30, stdin);
                 removeNewline(provinceName);
-                while (inProvArray(provinceName) != true)
-                {
-                    puts("Invalid province name.");
-                    printf("Enter province name: ");
-                    fgets(provinceName, 30, stdin);
-                    removeNewline(provinceName);
-                }
                 printProvince(head, provinceName);
                 break;
              case 4:
@@ -179,15 +172,14 @@ void printList(ProvincePtr listPtr)
 // DONE - prints menu
 void printMenu()
 {
-    printf("1. Insert province (HW - 1)\n");
-    printf("2. Delete entire list, print province w/ least cases (HW - 2)\n");
+    printf("1. Insert Province and Compute Total Number of Infections\n");
+    printf("2. Delete and Determine Least Infected Province\n");
     printf("3. Print Province\n");
     printf("4. Print List\n");
     printf("5. Exit\n");
     printf("Enter your choice: ");
 }
 
-// DONE - check if province is in provinces array
 bool inProvArray(char provinceName[30])
 {
     int i;
@@ -201,7 +193,7 @@ bool inProvArray(char provinceName[30])
     return false;
 }
 
-// DONE - removes newline char
+// DONE
 void removeNewline(char word[30])
 {
 	    int i = 0;
@@ -281,12 +273,6 @@ ProvincePtr insertAndComputeTotalNumberOfInfections(ProvincePtr listPtr, char pr
 // DONE
 void deleteAndDetermineLeastInfectedProvince(ProvincePtr listPtr)
 {
-    if (listPtr == NULL)
-    {
-        puts("List is empty.");
-        return;
-    }
-    
     ProvincePtr minPtr, currentPtr, tempPtr;
     minPtr = currentPtr = listPtr; 
     tempPtr = NULL;
@@ -306,15 +292,13 @@ void deleteAndDetermineLeastInfectedProvince(ProvincePtr listPtr)
         currentPtr = currentPtr->nextPtr;
     }
     printf("Province with least cases: %s\nTotal cases: %d\n", minPtr->provinceName, minPtr->totalNumberOfInfections);
+    currentPtr = listPtr;
     //nuke the whole list
     while (listPtr != NULL)
     {
         tempPtr = listPtr;
         listPtr = listPtr->nextPtr;
 
-        tempPtr->numberOfTestCenters= 0;
-        tempPtr->provinceName[0]= '\0';
-        tempPtr->totalNumberOfInfections = 0;
         free(tempPtr);
     }
     listPtr = NULL;
